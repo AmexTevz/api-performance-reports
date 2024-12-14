@@ -1,12 +1,11 @@
 import requests
 import time
 
-
 def authenticate():
-    auth_url = 'https://digitalmwdev.azure-api.net/v2/catalog/session/begin'
+    auth_url = 'https://catalogservice-ci-v2-3.digital-middleware-ase-dev.p.azurewebsites.net/v2/session/begin'
     headers = {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': 'ff9271bf1ffc4da9957c20c12b34cf17'
+        'Ocp-Apim-Subscription-Key': 'dec176b71bc447e99c42cc5ccef98d59'
     }
 
     auth_payload = {
@@ -32,9 +31,8 @@ def measure_response_time(url, payload, headers, name):
         start_time = time.time()
         response = requests.post(url, json=payload, headers=headers)
         end_time = time.time()
-        response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+        response_time = (end_time - start_time) * 1000
 
-        # Check for success in response body
         response_json = response.json()
         is_successful = response_json.get('Status') == 'SUCCESS'
         if not is_successful:
@@ -56,7 +54,6 @@ def measure_response_time(url, payload, headers, name):
 def print_comparison_results(original_result, new_result, endpoint_type):
     if original_result and new_result:
         difference = new_result['response_time'] - original_result['response_time']
-
         print(f"ENDPOINT - {original_result['url']}")
         print(f"Response time: {original_result['response_time']:.2f}ms")
         print(f"ENDPOINT - {new_result['url']}")
@@ -67,16 +64,16 @@ def print_comparison_results(original_result, new_result, endpoint_type):
 def compare_endpoints(session_id):
     headers = {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': 'ff9271bf1ffc4da9957c20c12b34cf17'
+        'Ocp-Apim-Subscription-Key': 'dec176b71bc447e99c42cc5ccef98d59'
     }
 
     endpoints = {
         'totals': {
-            'original': 'https://digitalmwdev.azure-api.net/v2/order/fullcart/totals',
-            'changed': 'https://orderservice-ci-v2-3-staging.digital-middleware-ase-dev.p.azurewebsites.net/v2/pos/totals'
+            'original': 'https://orderservice-ci-v2-3.digital-middleware-ase-dev.p.azurewebsites.net/v2/pos/totals',
+            'changed':  'https://orderservice-ci-v2-3-staging.digital-middleware-ase-dev.p.azurewebsites.net/v2/pos/totals'
         },
         'submit': {
-            'original': 'https://digitalmwdev.azure-api.net/v2/order/fullcart/submit',
+            'original': 'https://orderservice-ci-v2-3.digital-middleware-ase-dev.p.azurewebsites.net/v2/pos/submit',
             'changed': 'https://orderservice-ci-v2-3-staging.digital-middleware-ase-dev.p.azurewebsites.net/v2/pos/submit'
         }
     }
@@ -115,16 +112,16 @@ def compare_endpoints(session_id):
         }
     })
 
-    print("\n=== ENVIRONMENT => DEV/CI ====\n")
+    print("\n=== ENVIRONMENT => RETAIL DEV PRIVATE ====\n")
 
 
-    print("=== Totals Endpoints ===")
+    print("=== Retail Totals Endpoints ===")
     fullcart_totals = measure_response_time(endpoints['totals']['original'], fullcart_totals_payload, headers, "Totals Original")
     staging_totals = measure_response_time(endpoints['totals']['changed'], fullcart_totals_payload, headers, "Totals Changed")
     print_comparison_results(fullcart_totals, staging_totals, "Totals")
 
 
-    print("\n=== Submit Endpoints ===")
+    print("\n=== Retail Submit Endpoints ===")
     fullcart_submit = measure_response_time(endpoints['submit']['original'], fullcart_submit_payload, headers, "Submit Original")
     staging_submit = measure_response_time(endpoints['submit']['changed'], fullcart_submit_payload, headers, "Submit Changed")
     print_comparison_results(fullcart_submit, staging_submit, "Submit")
