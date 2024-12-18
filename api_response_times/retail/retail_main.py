@@ -88,6 +88,12 @@ def compare_endpoints(session_id):
                 "Condiments": [],
                 "Modifiers": []
             }
+        ],
+        "Discounts": [
+            {
+                "Code": "4",
+                "AmountOrPercent": 0
+            }
         ]
     }
 
@@ -108,7 +114,7 @@ def compare_endpoints(session_id):
             "authCode": "Test Check",
             "cardNumber": "XXXXXXX1234",
             "tenderType": "2001002",
-            "amount": 3.1500
+            "amount": 0.000
         }
     })
 

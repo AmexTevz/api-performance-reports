@@ -91,6 +91,12 @@ def compare_endpoints(session_id):
                 "Condiments": [],
                 "Modifiers": []
             }
+        ],
+        "Discounts": [
+            {
+                "Code": "4",
+                "AmountOrPercent": 0
+            }
         ]
     }
 
